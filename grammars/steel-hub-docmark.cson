@@ -1,0 +1,589 @@
+
+scopeName: 'docmark'
+name: 'Steel-Hub Docmark'
+fileTypes: [
+  'docmark'
+]
+firstLineMatch: ''
+foldingStartMarker: ''
+foldingStopMarker: ''
+patterns: [
+  {
+    begin: '^(~~~~~)'
+    end: '^(~~~~~)'
+    contentName: 'docmark.comment.text'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.comment.symbol'
+    endCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.comment.symbol'
+    include: ''
+  }
+  {
+    begin: '^[ \\t]*(?=[^ \\t\\n\\r\\|\\/\\#\\+\\@\\>\\-](?!(~~~~~)|(\\-)|(\\.\\.)|([a-z]\\.)|([0-9]\\.)|([ivxcm]*\\.)))'
+    end: '^(?=[ \\t]*[\\r\\n])'
+    contentName: 'docmark.paragraph.text'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.paragraph.symbol'
+    endCaptures:
+      0:
+        name: ''
+    include: ''
+    patterns: [
+      {
+        include: '#variable'
+      }
+      {
+        include: '#inlineContent'
+      }
+      {
+        include: '#format'
+      }
+    ]
+  }
+  {
+    begin: '^([ \\t]*(?:(?:\\-)|(?:\\.\\.)|(?:[a-z]{1,2}\\.)|(?:[0-9]{1,2}\\.)|(?:[ivxcm]{1,5}\\.)))'
+    end: '^(?=[ \\t]*(?:[\\r\\n]|(?:\\.\\.)|(?:\\-)|(?:[a-z]{1,2}\\.)|(?:[0-9]{1,2}\\.)|(?:[ivxcm]{1,5}\\.)))'
+    contentName: 'docmark.list.text'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.list.symbol'
+    endCaptures:
+      0:
+        name: ''
+    include: ''
+    patterns: [
+      {
+        include: '#variable'
+      }
+      {
+        include: '#inlineContent'
+      }
+      {
+        include: '#format'
+      }
+    ]
+  }
+  {
+    begin: '^([ \\t]*\\>)(?=[ \\t]*.{1})'
+    end: '^(?=[ \\t]*[\\r\\n\\>])'
+    contentName: 'docmark.blockQuote.text'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.blockQuote.symbol'
+    endCaptures:
+      0:
+        name: ''
+    include: ''
+    patterns: [
+      {
+        include: '#variable'
+      }
+      {
+        include: '#inlineContent'
+      }
+      {
+        include: '#format'
+      }
+    ]
+  }
+  {
+    begin: '^[ \\t]*(\\@)'
+    end: '$'
+    contentName: 'docmark.control.text'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.control.symbol'
+    endCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.control.symbol'
+    include: ''
+    patterns: [
+      {
+        include: '#variable'
+      }
+    ]
+  }
+  {
+    begin: '^[ \\t]*(\\/)'
+    end: '(\\/)'
+    contentName: 'docmark.section.name'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.section.symbol'
+    endCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.section.symbol'
+    include: ''
+  }
+  {
+    match: '^[ \\t]*(\\|)[ ]*([A-Z]+)[ ]*(\\|)'
+    captures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.blockContent.symbol'
+      2:
+        name: 'docmark.blockContent.name'
+      3:
+        name: 'docmark.blockContent.symbol'
+    include: ''
+  }
+  {
+    begin: '^[ \\t]*([\\#]+)(?=[ \\t]*[^\\n\\r])'
+    end: '^(?=[ \\t]*[\\r\\n\\#\\|\\>\\@\\^\\+\\/])'
+    contentName: 'docmark.heading.name'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.heading.symbol'
+    endCaptures:
+      0:
+        name: ''
+    include: ''
+    patterns: [
+      {
+        include: '#format'
+      }
+      {
+        include: '#variable'
+      }
+    ]
+  }
+  {
+    begin: '^[ \\t]*(\\+)'
+    end: '^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@])'
+    contentName: 'docmark.parameter.text'
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.parameter.symbol'
+    endCaptures:
+      0:
+        name: ''
+    include: ''
+    patterns: [
+      {
+        begin: '([a-z\\-\\_]+)(\\:)'
+        end: '^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@])'
+        contentName: 'docmark.parameter.value'
+        beginCaptures: {
+          0:
+            name: ''
+          1:
+            name: 'docmark.parameter.name'
+          2:
+            name: 'docmark.parameter.separator'
+          3:
+            name: ''
+        }
+        patterns: [
+          {
+            include: '#inlineContent'
+          }
+          {
+            include: '#format'
+          }
+          {
+            include: '#variable'
+          }
+        ]
+      }
+    ]
+  }
+  {
+    begin: '^[ \\t]*([\\#]{1})[ \\t]*$'
+    end: '^(?=[ \\t]*[\\r\\n\\#\\>\\@\\+\\/])'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.tableHeadingRow.rowSymbol'
+    endCaptures:
+      0:
+        name: ''
+    include: ''
+    patterns: [
+      {
+        begin: '^[ \\t]*([\\^]*)(\\|)([\\+]*)[ \\t]*'
+        end: '^(?=[ \\t]*[\\r\\n\\#\\>\\@\\+\\/\\^\\|])'
+        contentName: 'docmark.tableHeadingRow.text'
+        captures:
+          0:
+            name: ''
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.tableHeadingRow.modifierSymbol'
+          2:
+            name: 'docmark.tableHeadingRow.cellSymbol'
+          3:
+            name: 'docmark.tableHeadingRow.modifierSymbol'
+        patterns: [
+          {
+            include: '#inlineContent'
+          }
+          {
+            include: '#format'
+          }
+          {
+            include: '#variable'
+          }
+        ]
+      }
+    ]
+  }
+  {
+    begin: '^[ \\t]*([\\>]{1})[ \\t]*$'
+    end: '^(?=[ \\t]*[\\r\\n\\#\\>\\@\\+\\/])'
+    captures:
+      0:
+        name: ''
+    beginCaptures:
+      0:
+        name: ''
+      1:
+        name: 'docmark.tableDataRow.rowSymbol'
+    endCaptures:
+      0:
+        name: ''
+    include: ''
+    patterns: [
+      {
+        begin: '^[ \\t]*([\\^]*)(\\|)([\\+]*)[ \\t]*'
+        end: '^(?=[ \\t]*[\\r\\n\\#\\>\\@\\+\\/\\^\\|])'
+        contentName: 'docmark.tableDataRow.text'
+        captures:
+          0:
+            name: ''
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.tableDataRow.modifierSymbol'
+          2:
+            name: 'docmark.tableDataRow.cellSymbol'
+          3:
+            name: 'docmark.tableDataRow.modifierSymbol'
+        patterns: [
+          {
+            include: '#inlineContent'
+          }
+          {
+            include: '#format'
+          }
+          {
+            include: '#variable'
+          }
+        ]
+      }
+    ]
+  }
+]
+repository:
+
+  variable:
+    patterns: [
+
+      {
+        match: '(\\:\\:)([a-z0-9\\-\\.\\_]*)(\\:\\:)'
+        captures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.variable.symbol'
+          2:
+            name: 'docmark.variable.name'
+          3:
+            name: 'docmark.variable.symbol'
+      }
+      {
+        match: '(\\:\\:)([a-z0-9\\-\\.\\_]*)(\\:)([a-z0-9\\-\\.\\_]*)(\\:\\:)'
+        captures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.variable.symbol'
+          2:
+            name: 'docmark.variable.namespace'
+          3:
+            name: 'docmark.variable.symbol'
+          4:
+            name: 'docmark.variable.name'
+          5:
+            name: 'docmark.variable.symbol'
+      }
+    ]
+
+  format:
+    patterns:[
+      {
+        begin: '(\\*\\*)(?=[a-zA-Z0-9]|(\\*)|(\\~)|(\\_))'
+        end: '(\\*\\*)|(^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@]))'
+        contentName: 'docmark.bold.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.bold.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.bold.symbol'
+        patterns: [
+          {
+            include: '#format'
+          }
+        ]
+      }
+      {
+        begin: '(\\*)(?=[a-zA-Z0-9]|(\\*\\*)|(\\~)|(\\_))'
+        end: '(\\*)|(^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@]))'
+        contentName: 'docmark.emphasise.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.emphasise.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.emphasise.symbol'
+        patterns: [
+          {
+            include: '#format'
+          }
+        ]
+      }
+      {
+        begin: '(\\_)(?=[a-zA-Z0-9]|(\\*\\*)|(\\~)|(\\_))'
+        end: '(\\_)|(^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@]))'
+        contentName: 'docmark.mark.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.mark.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.mark.symbol'
+        patterns: [
+          {
+            include: '#format'
+          }
+        ]
+      }
+      {
+        begin: '(\\~)(?=[a-zA-Z0-9]|(\\*\\*)|(\\~)|(\\_))'
+        end: '(\\~)|(^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@]))'
+        contentName: 'docmark.delete.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.delete.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.delete.symbol'
+        patterns: [
+          {
+            include: '#format'
+          }
+        ]
+      }
+      {
+        match: '(\\/)$'
+        captures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.linebreak.symbol'
+      }
+    ]
+
+  inlineContent:
+    patterns: [
+      {
+        begin: '(\\~\\/)'
+        end: '(\\/\\~)'
+        contentName: 'docmark.comment.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.comment.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.comment.symbol'
+        include: ''
+      }
+      {
+        match: '(\\[)(.*?)(\\])(\\()((?:http://)|(?:https://)|(?:ftp://)|(?:mailto:))([a-zA-Z0-9:\\\\/\\-._%^&$£\'"~#@;?><,!+=]*)(\\))'
+        captures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.hyperlink.symbol'
+          2:
+            name: 'docmark.hyperlink.label'
+            patterns: [
+              {
+                include: '#variable'
+              }
+              {
+                include: '#format'
+              }
+            ]
+          3:
+            name: 'docmark.hyperlink.symbol'
+          4:
+            name: 'docmark.hyperlink.symbol'
+          5:
+            name: 'docmark.hyperlink.protocol'
+          6:
+            name: 'docmark.hyperlink.target'
+          7:
+            name: 'docmark.hyperlink.symbol'
+      }
+      {
+        match: '(\\()((?:http://)|(?:https://)|(?:ftp://)|(?:mailto:))([a-zA-Z0-9:\\\\/\\-._%^&$£\'"~#@;?><,!+=]*)(\\))'
+        captures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.hyperlink.symbol'
+          2:
+            name: 'docmark.hyperlink.protocol'
+          3:
+            name: 'docmark.hyperlink.target'
+          4:
+            name: 'docmark.hyperlink.symbol'
+      }
+      {
+        begin: '(\\")'
+        end: '(\\")|(^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@]))'
+        contentName: 'docmark.inlineQuote.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.inlineQuote.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.inlineQuote.symbol'
+        include: ''
+        patterns: [
+          {
+            include: '#inlineContent'
+          }
+          {
+            include: '#format'
+          }
+        ]
+      }
+      {
+        begin: '(\\^\\[)'
+        end: '(\\]\\^)|(^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@]))'
+        contentName: 'docmark.footnote.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.footnote.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.footnote.symbol'
+        include: ''
+        patterns: [
+          {
+            include: '#inlineContent'
+          }
+          {
+            include: '#format'
+          }
+        ]
+      }
+      {
+        begin: '(\\^\\{)'
+        end: '(\\}\\^)|(^(?=[ \\t]*[\\r\\n\\#\\|\\>\\+\\^\\@]))'
+        contentName: 'docmark.reference.text'
+        beginCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.reference.symbol'
+        endCaptures:
+          0:
+            name: ''
+          1:
+            name: 'docmark.reference.symbol'
+        include: ''
+        patterns: [
+          {
+            include: '#inlineContent'
+          }
+          {
+            include: '#format'
+          }
+        ]
+      }
+    ]
