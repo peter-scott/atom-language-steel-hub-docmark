@@ -1,6 +1,6 @@
 {
   "name": "language-steel-hub-docmark",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Grammar and snippets for steel-hub docmark.",
   "repository": "https://github.com/peter-scott/atom-language-steel-hub-docmark.git",
   "keywords": [
